@@ -19,7 +19,7 @@
         "Period": "5s", // *限流的时间
         "PeriodTimespan": 2, // *客户端达到请求上限多少秒后可以重试
         "Limit": 2 // *客户端在定义的时间内可以发出的最大请求数
-      } 
+      }
     },
     {
       "DownstreamPathTemplate": "/api/orders",
@@ -45,7 +45,30 @@
         "ExceptionsAllowedBeforeBreaking": 3, // 发生错误的次数
         "DurationOfBreak": 10000, // 熔断时间
         "TimeoutValue": 5000 // 超时时间
-      } 
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/orders/{url}",
+      "DownstreamScheme": "http",
+      "UpstreamPathTemplate": "/orders/{url}",
+      "UpstreamHttpMethod": [ "Get", "Post" ],
+      "ServiceName": "OrderService",
+      "FileCacheOptions": {
+        "TtlSeconds": 5,
+        "Region": "regionname"
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [ "SuperClient" ],
+        "EnableRateLimiting": true,
+        "Period": "5s",
+        "PeriodTimespan": 2,
+        "Limit": 1
+      },
+      "QosOptions": { // 服务质量 熔断
+        "ExceptionsAllowedBeforeBreaking": 3, // 发生错误的次数
+        "DurationOfBreak": 10000, // 熔断时间
+        "TimeoutValue": 5000 // 超时时间
+      }
     }
   ],
   "GlobalConfiguration": {
